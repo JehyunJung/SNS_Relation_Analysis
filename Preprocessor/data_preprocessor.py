@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from konlpy.tag import Okt
+import os
 
 class Preprocessor:
     #정규식을 이용해서 한글만을 남기도록 한다.
@@ -17,11 +18,12 @@ class Preprocessor:
         nouns=nouns_extractor.nouns(text)
         nouns=[noun for noun in nouns if len(noun) >1]
         return nouns
+
     #Stopwords(불용어)를 제거하도록 한다.
     @staticmethod
     def delete_Stopwords(text_data):
         stopwords=[]
-        with open('./stopwords.txt', encoding='utf-8') as fp:
+        with open(os.path.abspath('./Preprocessor/stopwords.txt'), encoding='utf-8') as fp:
             stopwords=fp.readlines()
         stopwords=[stopword.strip() for stopword in stopwords]
         nouns=[text for text in text_data if text not in stopwords]
@@ -29,7 +31,8 @@ class Preprocessor:
 
     @staticmethod
     def data_Preprocessing(data,column):
-        data['target']=data[column].apply(lambda text:Preprocessor.korean_Extract(text)).apply(lambda text:Preprocessor.noun_Extract()).apply(lambda text:Preprocessor.delete_Stopwords())
+        data['ko-text']=data[column].apply(lambda text:Preprocessor.korean_Extract(text))
+        data['target']=data['ko-text'].apply(lambda text:Preprocessor.noun_Extract(text)).apply(lambda text:Preprocessor.delete_Stopwords(text))
 
 
 

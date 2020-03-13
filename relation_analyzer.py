@@ -29,7 +29,7 @@ class Relation_Analyzer:
 
         #각 노드의 빈도수를 이용해서 추후에 그래프의 노드 사이즈로 활용한다.
         nouns_extract=Okt()
-        nouns=nouns_extract.nouns(data['target'])
+        nouns=nouns_extract.nouns("".join(data['ko-text']))
         noun_counts=Counter(nouns)
         noun_counts=Counter({noun : noun_counts[noun] for noun in noun_counts if len(noun) >1})
 
@@ -60,10 +60,11 @@ class Relation_Analyzer:
 
         # 그래프를 출력합니다.
         ax = plt.gca()
-        plt.savefig('../Relation_Analyzing_Result.png')
+        plt.savefig('./Relation_Analyzing_Result.png')
 
     @staticmethod
     def analyze(data):
-        network_graph,node_counts=Relation_Analyzer.relation_analysis()
+        network_graph,node_counts=Relation_Analyzer.relation_analysis(data)
+        print(network_graph,node_counts)
         Relation_Analyzer.graph_builder(network_graph,node_counts)
 
