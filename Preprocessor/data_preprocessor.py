@@ -29,7 +29,7 @@ class Preprocessor:
 
     @staticmethod
     def data_Preprocessing(data,column):
-        data['preprocessed_'+column]=data[column].apply(lambda text:Preprocessor.korean_Extract(text)).apply(lambda text:Preprocessor.noun_Extract()).apply(lambda text:Preprocessor.delete_Stopwords())
+        data['target']=data[column].apply(lambda text:Preprocessor.korean_Extract(text)).apply(lambda text:Preprocessor.noun_Extract()).apply(lambda text:Preprocessor.delete_Stopwords())
 
 
 
