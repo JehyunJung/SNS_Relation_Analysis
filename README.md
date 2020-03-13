@@ -43,7 +43,7 @@
 2. Crawler/data_synchrnozier.py에 키워드,page 정보를 입력해줍니다. 
     - 아래와 같이 keyword, page을 등록해줍니다.
     - ```python
-        synchronizer(keyword='한국',pages=100)
+        synchronizer(keyword='손흥민',pages=100)
         ```
     - 그런 다음, 해당 파이썬 파일을 실행해줍니다.
 
