@@ -1,4 +1,4 @@
-from .twitter_crawler import Twitter_Crawler
+from Crawler.twitter_crawler import Twitter_Crawler
 
 def synchronizer(**kwagrs):
     twitter_api=Twitter_Crawler()
