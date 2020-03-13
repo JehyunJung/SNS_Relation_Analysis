@@ -20,15 +20,20 @@ class Twitter_Crawler():
         columns = ['created', 'text']
         df = pd.DataFrame(columns=columns)
 
-        for page in range(pages):
-            tweets = self.api.search(keyword,lang='ko')
-            print(page,' : ',len(tweets))
-            for tweet in tweets:
-                tweet_text = tweet.text
-                created = tweet.created_at
-                row = [created, tweet_text]
-                series = pd.Series(row, index=df.columns)
-                df = df.append(series, ignore_index=True)
+        try:
+            for page in range(pages):
+                tweets = self.api.search(keyword,count=100)
+
+                for tweet in tweets:
+                    tweet_text = tweet.text
+                    created = tweet.created_at
+                    row = [created, tweet_text]
+                    series = pd.Series(row, index=df.columns)
+                    df = df.append(series, ignore_index=True)
+                print(page+1,' : ',len(df))
+        except :
+            print('error occured, crawling finishing')
+        print('crawling finished')
 
         df.to_csv('../data/twitter_data.csv',index=False,encoding='utf-8')
 
