@@ -12,11 +12,11 @@ class Relation_Analyzer:
         #키워드 간에 연관성 분석을 진행한다.
         transactions=data['target'].tolist()
         transactions = [transaction for transaction in transactions if transaction]
-        results = list(apriori(transactions,
-                               min_support=0.1,
-                               min_confidence=0.2,
-                               min_lift=5,
-                               max_length=2))
+        results=list(apriori(transactions,
+                     min_support=0.5,
+                     min_confidence=0.6,
+                     min_lift=1.0,
+                     max_length=2))
 
         #노드 2개가 서로 연결되어 있는 구조를 추출한다.
         columns=['source','target','weight']
@@ -61,7 +61,7 @@ class Relation_Analyzer:
 
         # 그래프를 출력합니다.
         ax = plt.gca()
-        plt.savefig('./Relation_Analyzing_Result(Twitter).png')
+        plt.savefig('./Results/Relation_Analyzing_Result(Twitter).png')
 
     @staticmethod
     def wordcloud_builder(data):
@@ -72,12 +72,11 @@ class Relation_Analyzer:
         data_tags = pytagcloud.make_tags(ranked_datas, maxsize=80)
 
         # pytagcloud 이미지를 생성합니다. 폰트는 나눔 고딕을 사용합니다.
-        pytagcloud.create_tag_image(data_tags, 'wordcloud(Twitter).png', size=(600, 600),fontname='NanumGothic', rectangular=False)
+        pytagcloud.create_tag_image(data_tags, './Results/wordcloud(Twitter).png', size=(600, 600),fontname='NanumGothic', rectangular=False)
 
     @staticmethod
     def analyze(data):
         network_graph,node_counts=Relation_Analyzer.relation_analysis(data)
-        print(network_graph,node_counts)
         Relation_Analyzer.wordcloud_builder(node_counts)
         Relation_Analyzer.graph_builder(network_graph,node_counts)
 

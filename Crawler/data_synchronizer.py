@@ -5,4 +5,4 @@ def synchronizer(**kwagrs):
     twitter_api.crawl_by_keyword(kwagrs['keyword'],kwagrs['pages'])
 
 if __name__ =="__main__":
-    synchronizer(keyword='코로나',pages=100)
+    synchronizer(keyword='손흥민',pages=100)
