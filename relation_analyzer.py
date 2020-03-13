@@ -4,6 +4,7 @@ from collections import Counter
 import pandas as pd
 import matplotlib.pyplot as plt
 import networkx as nx
+import pytagcloud
 
 class Relation_Analyzer:
     @staticmethod
@@ -25,7 +26,7 @@ class Relation_Analyzer:
             if len(result)==2:
                 nodes=[nodes for nodes in result.items]
                 row=[nodes[0],nodes[1],result.support]
-                keyword_network.append(pd.Series(row,index=keyword_network.columns),ignore_index=True)
+                keyword_network.append(pd.Series(row,index=keyword_network.columns),fontname='NanumGothic',ignore_index=True)
 
         #각 노드의 빈도수를 이용해서 추후에 그래프의 노드 사이즈로 활용한다.
         nouns_extract=Okt()
@@ -60,11 +61,23 @@ class Relation_Analyzer:
 
         # 그래프를 출력합니다.
         ax = plt.gca()
-        plt.savefig('./Relation_Analyzing_Result.png')
+        plt.savefig('./Relation_Analyzing_Result(Twitter).png')
+
+    @staticmethod
+    def wordcloud_builder(data):
+        # 도수가 높은 50개의 단어를 선정합니다.
+        ranked_datas = data.most_common(50)
+
+        # 단어의 최대 글자 크기를 80으로 제한
+        data_tags = pytagcloud.make_tags(ranked_datas, maxsize=80)
+
+        # pytagcloud 이미지를 생성합니다. 폰트는 나눔 고딕을 사용합니다.
+        pytagcloud.create_tag_image(data_tags, 'wordcloud(Twitter).png', size=(600, 600),fontname='NanumGothic', rectangular=False)
 
     @staticmethod
     def analyze(data):
         network_graph,node_counts=Relation_Analyzer.relation_analysis(data)
         print(network_graph,node_counts)
+        Relation_Analyzer.wordcloud_builder(node_counts)
         Relation_Analyzer.graph_builder(network_graph,node_counts)
 
