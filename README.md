@@ -58,17 +58,14 @@
     - 우선 해당 패키지의 fonts 폴더 경로를 알아야합니다.
         - 정상적으로 Anaconda3을 설치하셨다면 '~/anaconda3/envs/DataAnalysis/lib/python3.7/site-packages/pytagcloud/fonts/' 경로에 fonts 설정 파일이 존재해야합니다.
     - 그 후, Fonts/Nanumgothic.ttf 파일을 fonts 폴더에 복사해줍니다.
-    - 이렇게 해도 동작하지 않는 경우에 대해서는,
+    - 이렇게 해도 동작하지 않는 경우에 대해서는, 아래 의 text config정보를 pytagcloud 패키지의 fonts.json에 추가해주도록 합니다.
     	```json
 		{  
 			"name": "NanumGothic",  
 			"ttf": "NanumGothic.ttf",  
 			"web": "http://fonts.googleapis.com/css?family=Nanum+Gothic"  
 	    }
-	```
-	    
-       위의 text config정보를 pytagcloud 패키지의 fonts.json에 추가해주도록 합니다.
-    
+	    ```
 3. 트위터 데이터를 얻기 위해서는 server_config.json에 자신의 API key를 등록해야 한다.
     - 해당 부분은  https://developer.twitter.com/en/apps 에서 트위터 개발자 회원 가입을 진행하면 됩니다.
     - server_config.json
@@ -79,8 +76,7 @@
     			"ACCESS_TOKEN_KEY":"{YOUR_KEY}",  
     			"ACCESS_TOKEN_SECRET":"{YOUR_KEY}"  
 		}
-	```
-
+		```
 4. Crawler/data_synchrnozier.py에 키워드,page 정보를 입력해줍니다. 
     - 아래와 같이 keyword, 크롤링할 page수를 등록해줍니다.
      ```python
