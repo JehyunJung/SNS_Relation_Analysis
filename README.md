@@ -56,14 +56,15 @@
     ```
 2. pytagcloud(워드클라우드 관련 패키지)에서 한글을 출력하기 위해 한글을 지원하는 나눔고딕을 사용한다. 이를 위해, font 설정을 진행해야 한다.
     - 우선 해당 패키지의 fonts 폴더 경로를 알아야합니다.
-        - 정상적으로 Anaconda3을 설치하셨다면 '~/anaconda3/envs/DataAnalysis/lib/python3.7/site-packages/pytagcloud/fonts/' 이 경로에 fonts 설정 파일이 존재해야합니다.
+        - 정상적으로 Anaconda3을 설치하셨다면 '~/anaconda3/envs/DataAnalysis/lib/python3.7/site-packages/pytagcloud/fonts/' 경로에 fonts 설정 파일이 존재해야합니다.
     - 그 후, Fonts/Nanumgothic.ttf 파일을 fonts 폴더에 복사해줍니다.
     - 이렇게 해도 동작하지 않는 경우에 대해서는,
-    	{
-		"name": "NanumGothic",
-		"ttf": "NanumGothic.ttf",
-		"web": "http://fonts.googleapis.com/css?family=Nanum+Gothic"
+    	> {  
+		"name": "NanumGothic",  
+		"ttf": "NanumGothic.ttf",  
+		"web": "http://fonts.googleapis.com/css?family=Nanum+Gothic"  
 	    }
+	    
        위의 text config정보를 pytagcloud 패키지의 fonts.json에 추가해주도록 합니다.
     
 3. 트위터 데이터를 얻기 위해서는 server_config.json에 자신의 API key를 등록해야 한다.
