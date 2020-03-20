@@ -3,9 +3,12 @@ from mlxtend.frequent_patterns import apriori
 from konlpy.tag import Okt
 from collections import Counter
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import networkx as nx
 import pytagcloud
+
 
 class Association_Analyzer:
     @staticmethod
@@ -55,11 +58,14 @@ class Association_Analyzer:
 
 
         # 그래프 디자인과 관련된 파라미터를 설정합니다.
-        pos = nx.spring_layout(G, k=0.6, iterations=50)
-        sizes = [G.nodes[node]['nodesize']*25 for node in G]
-        nx.draw(G, pos=pos, node_size=sizes)
+        pos = nx.shell_layout(G)
+        sizes = [G.nodes[node]['nodesize']*10 for node in G]
+        nx.draw_shell(G, pos=pos, node_size=sizes)
 
-        # Windows 사용자는 AppleGothic 대신,'Malgun Gothic'. 그 외 OS는 OS에서 한글을 지원하는 기본 폰트를 입력합니다.
+        # font_path="./Fonts/NanumGothic.ttf"
+        # gothic_Font=fm.FontProperties(fname=font_path).get_name()
+        # matplotlib.rc('font',family=gothic_Font)
+        # print(matplotlib.rcParams)
         nx.draw_networkx_labels(G, pos=pos, font_family='Malgun Gothic', font_size=25)
 
         # 그래프를 출력합니다.
@@ -68,6 +74,7 @@ class Association_Analyzer:
 
     @staticmethod
     def wordcloud_builder(data):
+
         # 도수가 높은 50개의 단어를 선정합니다.
         ranked_datas = data.most_common(50)
 
@@ -76,7 +83,6 @@ class Association_Analyzer:
 
         # pytagcloud 이미지를 생성합니다. 폰트는 나눔 고딕을 사용합니다.
         pytagcloud.create_tag_image(data_tags, './Results/wordcloud(Twitter).png', size=(600, 600),fontname='NanumGothic', rectangular=False)
-
     @staticmethod
     def analyze(data):
         network_graph,node_counts=Association_Analyzer.relation_analysis(data)

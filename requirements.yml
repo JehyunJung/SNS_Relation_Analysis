@@ -64,9 +64,11 @@ dependencies:
     - colorama==0.4.3
     - decorator==4.4.2
     - idna==2.9
+    - joblib==0.14.1
     - jpype1==0.7.2
     - konlpy==0.5.2
     - lxml==4.5.0
+    - mlxtend==0.17.2
     - networkx==2.4
     - oauthlib==3.1.0
     - pygame==1.9.6
@@ -74,6 +76,8 @@ dependencies:
     - pytagcloud==0.3.5
     - requests==2.23.0
     - requests-oauthlib==1.3.0
+    - scikit-learn==0.22.2.post1
+    - scipy==1.4.1
     - simplejson==3.17.0
     - tweepy==3.8.0
     - urllib3==1.25.8
