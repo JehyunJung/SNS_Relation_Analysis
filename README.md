@@ -93,5 +93,9 @@
 5. 마지막으로, relation_analyzer.py을 실행하면, Results 폴더 연관분석 결과가 추출됩니다.
 
 ## Results
-<img src="./Results/wordcloud(Twitter).png" alt="wordcloud" width="300" height="300"/> 
-<img src="./Results/Relation_Analyzing_Result(Twitter).png" alt="wordcloud" width="300" height="300"/>
+WordCloud:
+ <img src="./Results/wordcloud(Twitter).png" alt="wordcloud" width="300" height="300"/>
+Association_Analysis:
+ <img src="./Results/Relation_Analyzing_Result(Twitter).png" alt="wordcloud" width="300" height="300"/>
+ 
+ 
