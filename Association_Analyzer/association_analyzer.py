@@ -58,15 +58,16 @@ class Association_Analyzer:
 
 
         # 그래프 디자인과 관련된 파라미터를 설정합니다.
-        pos = nx.shell_layout(G)
+        pos = nx.spring_layout(G, k=0.6, iterations=50)
         sizes = [G.nodes[node]['nodesize']*10 for node in G]
-        nx.draw_shell(G, pos=pos, node_size=sizes)
+        nx.draw(G, pos=pos, node_size=sizes)
 
+        # Windows 사용자는 AppleGothic 대신,'Malgun Gothic'. 그 외 OS는 OS에서 한글을 지원하는 기본 폰트를 입력합니다.
         # font_path="./Fonts/NanumGothic.ttf"
         # gothic_Font=fm.FontProperties(fname=font_path).get_name()
         # matplotlib.rc('font',family=gothic_Font)
         # print(matplotlib.rcParams)
-        nx.draw_networkx_labels(G, pos=pos, font_family='Malgun Gothic', font_size=25)
+        nx.draw_networkx_labels(G, pos=pos, font_family='Malgun Gothic',size=(1000,1000), font_size=25)
 
         # 그래프를 출력합니다.
         ax = plt.gca()
