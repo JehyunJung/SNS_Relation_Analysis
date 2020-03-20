@@ -1,6 +1,6 @@
 import pandas as pd
 from Preprocessor.data_preprocessor import Preprocessor
-from relation_analyzer import Relation_Analyzer
+from Association_Analyzer.association_analyzer import Association_Analyzer
 
 def main():
     #twitter 데이터를 읽는다
@@ -10,7 +10,7 @@ def main():
     Preprocessor.data_Preprocessing(data,'text')
 
     #전처리된 데이터를 이용해서 연관 분석을 진행한다.
-    Relation_Analyzer.analyze(data)
+    Association_Analyzer.analyze(data)
 
 if __name__ == "__main__":
     main()

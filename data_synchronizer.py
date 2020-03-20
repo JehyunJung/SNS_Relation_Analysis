@@ -1,4 +1,4 @@
-from twitter_crawler import Twitter_Crawler
+from Crawler.twitter_crawler import Twitter_Crawler
 import sys
 
 def synchronizer(keyword,pages=50):
@@ -12,12 +12,13 @@ if __name__ =="__main__":
     elif sys.argv[1]=='-k':
         if len(sys.argv)>2 :
             keyword=sys.argv[2]
-            if sys.argv[3]=='-p':
-                if len(sys.argv)>4:
-                    pages=int(sys.argv[4])
-                    synchronizer(keyword,pages)
-                else:
-                    print('page is not inserted')
+            if len(sys.argv)>3:
+                if sys.argv[3]=='-p':
+                    if len(sys.argv)>4:
+                        pages=int(sys.argv[4])
+                        synchronizer(keyword,pages)
+                    else:
+                        print('page is not inserted')
             else:
                 synchronizer(keyword)
         else:

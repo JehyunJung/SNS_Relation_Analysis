@@ -51,8 +51,8 @@
 ## How to run
 1. requirement.yml을 이용해서 conda 가상환경을 설정합니다.
     ```bash
-    USER@LOCALHOST:*/SNS_Relation_Analysis$ conda env create -f requirements.yml
-    USER@LOCALHOST:*/SNS_Relation_Analysis$ conda activate DataAnalysis
+    user@localhost:*/SNS_Relation_Analysis$ conda env create -f requirements.yml
+    user@localhost:*/SNS_Relation_Analysis$ conda activate DataAnalysis
     ```
 2. pytagcloud(워드클라우드 관련 패키지)에서 한글을 출력하기 위해 한글을 지원하는 나눔고딕을 사용한다. 이를 위해, font 설정을 진행해야 한다.
     - 우선 해당 패키지의 fonts 폴더 경로를 알아야합니다.
@@ -66,9 +66,9 @@
 			"web": "http://fonts.googleapis.com/css?family=Nanum+Gothic"  
 	    }
 	    ```
-3. 트위터 데이터를 얻기 위해서는 server_config.json에 자신의 API key를 등록해야 한다.
+3. 트위터 데이터를 얻기 위해서는 Crawler 폴더 내의 server_config.json에 자신의 API key를 등록해야 한다.
     - 해당 부분은  https://developer.twitter.com/en/apps 에서 트위터 개발자 회원 가입을 진행하면 됩니다.
-    - server_config.json
+    - Crawler/server_config.json
     	```json 
 		{  
     			"CONSUMER_KEY":"{YOUR_KEY}",  
@@ -77,15 +77,21 @@
     			"ACCESS_TOKEN_SECRET":"{YOUR_KEY}"  
 		}
 		```
-4. Crawler/data_synchrnozier.py에 키워드,page 정보를 입력해줍니다. 
-    - 아래와 같이 keyword, 크롤링할 page수를 등록해줍니다.
-     ```python
-        synchronizer(keyword='손흥민',pages=100)
-     ```
+4. data_synchrnozier.py을 통해 트위터 크롤링을 진행한다.
+    - 아래와 같이 twitter crawling을 진행합니다.
+    - keyword와 page 정보를 같이 전달하는 겨우
+        ```bash
+        (DataAnalysis)user@localhost:*/SNS_Relation_Analysis$ python ./data_synchronizer.py -k <keyword>
+        ```
+    - keyword 정보만 전달하는 경우, 이때, page는 50으로 기본 설정되어있다.
+        ```bash
+        (DataAnalysis)user@localhost:*/SNS_Relation_Analysis$ python ./data_synchronizer.py -k <keyword> -p <page>
+        ```
+
     - 그런 다음, 해당 파이썬 파일을 실행해줍니다.
 
 5. 마지막으로, relation_analyzer.py을 실행하면, Results 폴더 연관분석 결과가 추출됩니다.
 
 ## Results
 <img src="./Results/wordcloud(Twitter).png" alt="wordcloud" width="300" height="300"/> 
-<img src="./Relation_Analyzing_Result(Twitter).png" alt="wordcloud" width="300" height="300"/>
+<img src="./Results/Relation_Analyzing_Result(Twitter).png" alt="wordcloud" width="300" height="300"/>

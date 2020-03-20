@@ -5,7 +5,7 @@ import tweepy
 class Twitter_Crawler():
     #Twitter API를 사용하기 위해서, 키를 입력해서 twitter.api.API 객체를 생성한다.
     def __init__(self):
-        with open('../server_config.json', encoding='utf-8') as fp:
+        with open('./Crawler/server_config.json', encoding='utf-8') as fp:
             configs=json.load(fp)
             self.consumer_key=configs['CONSUMER_KEY']
             self.consumer_secret=configs['CONSUMER_SECRET']
@@ -35,5 +35,5 @@ class Twitter_Crawler():
             print('error occured, crawling finishing')
         print('crawling finished')
 
-        df.to_csv('../data/twitter_data.csv',index=False,encoding='utf-8')
+        df.to_csv('./data/twitter_data.csv',index=False,encoding='utf-8')
 

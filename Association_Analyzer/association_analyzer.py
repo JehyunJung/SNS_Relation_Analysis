@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pytagcloud
 
-class Relation_Analyzer:
+class Association_Analyzer:
     @staticmethod
     def relation_analysis(data):
         #키워드 간에 연관성 분석을 진행한다.
@@ -79,7 +79,8 @@ class Relation_Analyzer:
 
     @staticmethod
     def analyze(data):
-        network_graph,node_counts=Relation_Analyzer.relation_analysis(data)
-        Relation_Analyzer.wordcloud_builder(node_counts)
-        Relation_Analyzer.graph_builder(network_graph,node_counts)
+        network_graph,node_counts=Association_Analyzer.relation_analysis(data)
+        print(network_graph,node_counts)
+        Association_Analyzer.wordcloud_builder(node_counts)
+        Association_Analyzer.graph_builder(network_graph,node_counts)
 
