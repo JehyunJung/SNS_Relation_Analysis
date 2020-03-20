@@ -1,4 +1,5 @@
-from apyori import apriori
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori
 from konlpy.tag import Okt
 from collections import Counter
 import pandas as pd
@@ -12,21 +13,21 @@ class Relation_Analyzer:
         #키워드 간에 연관성 분석을 진행한다.
         transactions=data['target'].tolist()
         transactions = [transaction for transaction in transactions if transaction]
-        results=list(apriori(transactions,
-                     min_support=0.5,
-                     min_confidence=0.6,
-                     min_lift=1.0,
-                     max_length=2))
+        transaction_encoder=TransactionEncoder()
+        transactions=transaction_encoder.fit(transactions).transform(transactions)
+        transactions_df=pd.DataFrame(transactions,columns=transaction_encoder.columns_)
+        results=apriori(transactions_df, min_support=0.1, max_len=2,use_colnames=True)
+
 
         #노드 2개가 서로 연결되어 있는 구조를 추출한다.
         columns=['source','target','weight']
         keyword_network=pd.DataFrame(columns=columns)
 
-        for result in results:
-            if len(result)==2:
-                nodes=[nodes for nodes in result.items]
-                row=[nodes[0],nodes[1],result.support]
-                keyword_network.append(pd.Series(row,index=keyword_network.columns),fontname='NanumGothic',ignore_index=True)
+        for row,result in results.iterrows():
+            if len(result['itemsets'])==2:
+                nodes=[nodes for nodes in list(result['itemsets'])]
+                row=[nodes[0],nodes[1],result['support']]
+                keyword_network=keyword_network.append(pd.Series(row,index=keyword_network.columns),ignore_index=True)
 
         #각 노드의 빈도수를 이용해서 추후에 그래프의 노드 사이즈로 활용한다.
         nouns_extract=Okt()
@@ -43,21 +44,23 @@ class Relation_Analyzer:
         # networkx 그래프 객체를 생성합니다.
         G = nx.Graph()
 
-        # network_graph의 키워드 빈도수를 데이터로 하여, 네트워크 그래프의 ‘노드’ 역할을 하는 원을 생성합니다.
-        for index, row in network_graph.iterrows():
-            G.add_node(row['node'], nodesize=row['nodesize'])
+        # network_graph의 키워드 빈도수를 데이터로 하여, 네트워크 그래프의 ‘노드’ 역할을 하는 원을 생성합니다. 상위 50개의 노드만 추가한다
+        for node,size in node_counts.most_common(n=50):
+            G.add_node(node, nodesize=size)
 
         # network_graph의 연관 분석 데이터를 기반으로, 네트워크 그래프의 ‘관계’ 역할을 하는 선을 생성합니다.
         for index, row in network_graph.iterrows():
-            G.add_weighted_edges_from([(row['source'], row['target'], row['weight'])])
+            if row['source'] in G.nodes and row['target'] in G.nodes:
+                G.add_weighted_edges_from([(row['source'], row['target'], row['weight'])])
+
 
         # 그래프 디자인과 관련된 파라미터를 설정합니다.
         pos = nx.spring_layout(G, k=0.6, iterations=50)
-        sizes = [G.node[node]['nodesize']*25 for node in G]
+        sizes = [G.nodes[node]['nodesize']*25 for node in G]
         nx.draw(G, pos=pos, node_size=sizes)
 
         # Windows 사용자는 AppleGothic 대신,'Malgun Gothic'. 그 외 OS는 OS에서 한글을 지원하는 기본 폰트를 입력합니다.
-        nx.draw_networkx_labels(G, pos=pos, font_family='AppleGothic', font_size=25)
+        nx.draw_networkx_labels(G, pos=pos, font_family='Malgun Gothic', font_size=25)
 
         # 그래프를 출력합니다.
         ax = plt.gca()
