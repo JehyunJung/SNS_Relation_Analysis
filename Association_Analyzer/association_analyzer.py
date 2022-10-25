@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import networkx as nx
 import pytagcloud
+import re
+from os.path import dirname,join
 
 
 class Association_Analyzer:
@@ -16,11 +18,14 @@ class Association_Analyzer:
         #키워드 간에 연관성 분석을 진행한다.
         transactions=data['target'].tolist()
         transactions = [transaction for transaction in transactions if transaction]
+
+        #각각의 리스트에 대해서 원소가 포함되어 있는 지 여부를 TransactionEncoder을 통해 나타낸다.
         transaction_encoder=TransactionEncoder()
         transactions=transaction_encoder.fit(transactions).transform(transactions)
         transactions_df=pd.DataFrame(transactions,columns=transaction_encoder.columns_)
+        #지지도라고 하는 것은 전체 항목에서 x,y가 연관되어 있는 정도를 나타내는 것인데 이게 각 행에 대해 어느 정도 비율로 존재하는 지를 나타내는 수치이다.
+        #이 수치가 높으면 높을 수록 두 개의 연과성이 높다는 것을 의미한다.
         results=apriori(transactions_df, min_support=0.1, max_len=2,use_colnames=True)
-
 
         #노드 2개가 서로 연결되어 있는 구조를 추출한다.
         columns=['source','target','weight']
@@ -30,15 +35,12 @@ class Association_Analyzer:
             if len(result['itemsets'])==2:
                 nodes=[nodes for nodes in list(result['itemsets'])]
                 row=[nodes[0],nodes[1],result['support']]
-                keyword_network=keyword_network.append(pd.Series(row,index=keyword_network.columns),ignore_index=True)
-
+                keyword_network = pd.concat([keyword_network,pd.DataFrame([[nodes[0],nodes[1],result['support']]],columns=keyword_network.columns)])
         #각 노드의 빈도수를 이용해서 추후에 그래프의 노드 사이즈로 활용한다.
-        nouns_extract=Okt()
-        nouns=nouns_extract.nouns("".join(data['ko-text']))
-        noun_counts=Counter(nouns)
-        noun_counts=Counter({noun : noun_counts[noun] for noun in noun_counts if len(noun) >1})
-
-        return keyword_network,noun_counts
+        #각 노드의 빈도수를 이용해서 추후에 그래프의 노드 사이즈로 활용한다.
+        node_counts=Counter([value for values in data['target'] for value in values])
+        
+        return keyword_network,node_counts
 
     @staticmethod
     def graph_builder(network_graph, node_counts):
@@ -62,12 +64,8 @@ class Association_Analyzer:
         sizes = [G.nodes[node]['nodesize']*10 for node in G]
         nx.draw(G, pos=pos, node_size=sizes)
 
-        # Windows 사용자는 AppleGothic 대신,'Malgun Gothic'. 그 외 OS는 OS에서 한글을 지원하는 기본 폰트를 입력합니다.
-        # font_path="./Fonts/NanumGothic.ttf"
-        # gothic_Font=fm.FontProperties(fname=font_path).get_name()
-        # matplotlib.rc('font',family=gothic_Font)
         # print(matplotlib.rcParams)
-        nx.draw_networkx_labels(G, pos=pos, font_family='Malgun Gothic',size=(1000,1000), font_size=25)
+        nx.draw_networkx_labels(G, pos=pos, font_family="Malgun Gothic", font_size=25)
 
         # 그래프를 출력합니다.
         ax = plt.gca()
@@ -87,7 +85,6 @@ class Association_Analyzer:
     @staticmethod
     def analyze(data):
         network_graph,node_counts=Association_Analyzer.relation_analysis(data)
-        print(network_graph,node_counts)
         Association_Analyzer.wordcloud_builder(node_counts)
         Association_Analyzer.graph_builder(network_graph,node_counts)
 
